@@ -21,10 +21,10 @@ namespace PollAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Antwoord>().ToTable("Antwoord");
             modelBuilder.Entity<Gebruiker>().ToTable("Gebruiker");
             modelBuilder.Entity<Poll>().ToTable("Poll");
             modelBuilder.Entity<PollGebruiker>().ToTable("PollGebruiker");
+            modelBuilder.Entity<Antwoord>().ToTable("Antwoord");
             modelBuilder.Entity<Stem>().ToTable("Stem");
         }
     }

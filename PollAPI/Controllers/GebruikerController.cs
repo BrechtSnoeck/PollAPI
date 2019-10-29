@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PollAPI.Models;
+using PollAPI.Services;
 
 namespace PollAPI.Controllers
 {
@@ -14,13 +16,27 @@ namespace PollAPI.Controllers
     public class GebruikerController : ControllerBase
     {
         private readonly PollContext _context;
+        private IGebruikerService _gebruikerService;
 
-        public GebruikerController(PollContext context)
+        public GebruikerController(PollContext context, IGebruikerService gebruikerService)
         {
             _context = context;
+            _gebruikerService = gebruikerService;
+        }
+
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody]Gebruiker userParam)
+        {
+            var gebruiker = _gebruikerService.Authenticate(userParam.Gebruikersnaam, userParam.Wachtwoord);
+
+            if (gebruiker == null)
+                return BadRequest(new { message = "Gebruikersnaam of wachtwoord is incorrect" });
+
+            return Ok(gebruiker);
         }
 
         // GET: api/Gebruiker
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Gebruiker>>> GetGebruikers()
         {
@@ -28,6 +44,7 @@ namespace PollAPI.Controllers
         }
 
         // GET: api/Gebruiker/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Gebruiker>> GetGebruiker(int id)
         {
@@ -42,6 +59,7 @@ namespace PollAPI.Controllers
         }
 
         // PUT: api/Gebruiker/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGebruiker(int id, Gebruiker gebruiker)
         {
@@ -72,6 +90,7 @@ namespace PollAPI.Controllers
         }
 
         // POST: api/Gebruiker
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Gebruiker>> PostGebruiker(Gebruiker gebruiker)
         {
@@ -82,6 +101,7 @@ namespace PollAPI.Controllers
         }
 
         // DELETE: api/Gebruiker/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Gebruiker>> DeleteGebruiker(int id)
         {
