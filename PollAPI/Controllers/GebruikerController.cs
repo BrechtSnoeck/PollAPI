@@ -90,14 +90,19 @@ namespace PollAPI.Controllers
         }
 
         // POST: api/Gebruiker
-        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Gebruiker>> PostGebruiker(Gebruiker gebruiker)
         {
-            _context.Gebruikers.Add(gebruiker);
-            await _context.SaveChangesAsync();
+            var bestaatGebruiker =  _context.Gebruikers.SingleOrDefault(g => g.Email == gebruiker.Email);
+            if (bestaatGebruiker == null)
+            {
+                _context.Gebruikers.Add(gebruiker);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGebruiker", new { id = gebruiker.GebruikerID }, gebruiker);
+                return CreatedAtAction("GetGebruiker", new { id = gebruiker.GebruikerID }, gebruiker);
+            }
+
+            return null;
         }
 
         // DELETE: api/Gebruiker/5
