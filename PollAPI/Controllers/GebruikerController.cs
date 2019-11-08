@@ -36,7 +36,6 @@ namespace PollAPI.Controllers
         }
 
         // GET: api/Gebruiker
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Gebruiker>>> GetGebruikers()
         {
@@ -44,7 +43,6 @@ namespace PollAPI.Controllers
         }
 
         // GET: api/Gebruiker/5
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Gebruiker>> GetGebruiker(int id)
         {
@@ -59,7 +57,6 @@ namespace PollAPI.Controllers
         }
 
         // PUT: api/Gebruiker/5
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGebruiker(int id, Gebruiker gebruiker)
         {
