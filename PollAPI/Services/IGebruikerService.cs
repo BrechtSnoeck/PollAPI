@@ -8,6 +8,6 @@ namespace PollAPI.Services
 {
     public interface IGebruikerService
     {
-        Gebruiker Authenticate(string gebruikersnaam, string wachtwoord);
+        Gebruiker Authenticate(string email, string wachtwoord);
     }
 }

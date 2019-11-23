@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace PollAPI.Controllers
         }
 
         // GET: api/Stem
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Stem>>> GetStemmen()
         {
@@ -28,6 +30,7 @@ namespace PollAPI.Controllers
         }
 
         // GET: api/Stem/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Stem>> GetStem(int id)
         {
@@ -42,6 +45,7 @@ namespace PollAPI.Controllers
         }
 
         // PUT: api/Stem/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStem(int id, Stem stem)
         {
@@ -72,16 +76,37 @@ namespace PollAPI.Controllers
         }
 
         // POST: api/Stem
+        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Stem>> PostStem(Stem stem)
+        public async Task<ActionResult<IEnumerable<Stem>>> PostStem(StemDto stemDto)
         {
-            _context.Stemmen.Add(stem);
+            foreach (int item in stemDto.AntwoordIDs)
+            {
+                _context.Stemmen
+                    .Add(
+                    new Stem
+                    {
+                        AntwoordID = item,
+                        GebruikerID = stemDto.GebruikerID
+                    });
+            }
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStem", new { id = stem.StemID }, stem);
+            var pollGebruiker = await _context.PollGebruikers.FindAsync(stemDto.PollGebruikerID);
+            if (pollGebruiker == null)
+            {
+                return NotFound();
+            }
+            pollGebruiker.Gestemd = true;
+            await _context.SaveChangesAsync();
+
+            var stemmen = _context.Stemmen.Where(s => s.GebruikerID == stemDto.GebruikerID);
+
+            return await stemmen.ToListAsync();
         }
 
         // DELETE: api/Stem/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Stem>> DeleteStem(int id)
         {

@@ -26,10 +26,18 @@ namespace PollAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Poll>>> GetPolls()
         {
-            return await _context.Polls.ToListAsync();
+            //return await _context.Polls.ToListAsync();
+
+            var polls = _context.Polls
+                 .Include(poll => poll.PollGebruikers)
+                 .ThenInclude(pg => pg.Gebruiker);
+
+            return await polls.ToListAsync();
         }
 
+
         // GET: api/Poll/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Poll>> GetPoll(int id)
         {
@@ -44,6 +52,7 @@ namespace PollAPI.Controllers
         }
 
         // PUT: api/Poll/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPoll(int id, Poll poll)
         {
@@ -74,16 +83,62 @@ namespace PollAPI.Controllers
         }
 
         // POST: api/Poll
+        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Poll>> PostPoll(Poll poll)
+        public async Task<ActionResult<Poll>> PostPoll(PollDto pollDto)
         {
+            var poll = new Poll
+            {
+                Naam = pollDto.Naam
+            };
             _context.Polls.Add(poll);
+
+            await _context.SaveChangesAsync();
+
+            foreach (var optie in pollDto.Opties)
+            {
+                _context.Antwoorden
+                    .Add(
+                    new Antwoord
+                    {
+                        PollID = poll.PollID,
+                        Optie = optie.Optie
+                    });
+            }
+
+            await _context.SaveChangesAsync();
+
+            foreach (int item in pollDto.VriendenIDs)
+            {
+                _context.PollGebruikers
+                    .Add(
+                    new PollGebruiker
+                    {
+                        PollID = poll.PollID,
+                        GebruikerID = item,
+                        Gestemd = false,
+                        IsAdmin = false
+                    });
+            }
+            await _context.SaveChangesAsync();
+
+            _context.PollGebruikers
+                    .Add(
+                    new PollGebruiker
+                    {
+                        PollID = poll.PollID,
+                        GebruikerID = pollDto.MakerID,
+                        Gestemd = false,
+                        IsAdmin = true
+                    });
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPoll", new { id = poll.PollID }, poll);
         }
 
         // DELETE: api/Poll/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Poll>> DeletePoll(int id)
         {

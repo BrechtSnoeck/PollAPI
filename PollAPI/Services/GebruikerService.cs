@@ -23,9 +23,9 @@ namespace PollAPI.Services
             _pollContext = pollContext;
         }
 
-        public Gebruiker Authenticate(string gebruikersnaam, string wachtwoord)
+        public Gebruiker Authenticate(string email, string wachtwoord)
         {
-            var gebruiker = _pollContext.Gebruikers.SingleOrDefault(x => x.Gebruikersnaam == gebruikersnaam && x.Wachtwoord == wachtwoord);
+            var gebruiker = _pollContext.Gebruikers.SingleOrDefault(x => x.Email == email && x.Wachtwoord == wachtwoord);
 
             // return null if gebruiker not found
             if (gebruiker == null)

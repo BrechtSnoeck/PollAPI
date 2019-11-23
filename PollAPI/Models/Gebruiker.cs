@@ -14,8 +14,9 @@ namespace PollAPI.Models
         public string Gebruikersnaam { get; set; }
         [NotMapped]
         public string Token { get; set; }
-
-        public ICollection<PollGebruiker> PollGebruikers {get;set;}
+        public ICollection<PollGebruiker> PollGebruikers { get; set; }
         public ICollection<Stem> Stemmen { get; set; }
+        public ICollection<Relatie> OntvangenVrienden { get; set; }
+        public ICollection<Relatie> VerzondenVrienden { get; set; }
     }
 }

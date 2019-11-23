@@ -10,7 +10,9 @@ namespace PollAPI.Models
         public int PollGebruikerID { get; set; }
         public int PollID { get; set; }
         public int GebruikerID { get; set; }
-        public Poll Poll { get; set; }
+        public bool Gestemd { get; set; }
+        public bool IsAdmin { get; set; }
         public Gebruiker Gebruiker { get; set; }
+        public Poll Poll { get; set; }
     }
 }

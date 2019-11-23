@@ -9,8 +9,7 @@ namespace PollAPI.Models
     {
         public int PollID { get; set; }
         public string Naam { get; set; }
-
-        public ICollection<PollGebruiker> PollsVanGebruikers { get; set; }
+        public ICollection<PollGebruiker> PollGebruikers { get; set; }
         public ICollection<Antwoord> Antwoorden { get; set; }
     }
 }

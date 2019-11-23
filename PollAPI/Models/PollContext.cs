@@ -18,6 +18,7 @@ namespace PollAPI.Models
         public DbSet<Poll> Polls { get; set; }
         public DbSet<PollGebruiker> PollGebruikers { get; set; }
         public DbSet<Stem> Stemmen { get; set; }
+        public DbSet<Relatie> Relaties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +27,21 @@ namespace PollAPI.Models
             modelBuilder.Entity<PollGebruiker>().ToTable("PollGebruiker");
             modelBuilder.Entity<Antwoord>().ToTable("Antwoord");
             modelBuilder.Entity<Stem>().ToTable("Stem");
+
+            modelBuilder.Entity<Relatie>()
+                .HasKey(e => new { e.RelatieID });
+
+            modelBuilder.Entity<Relatie>()
+                .HasOne(e => e.Zender)
+                .WithMany(e => e.VerzondenVrienden)
+                .HasForeignKey(e => e.GebruikerID_1)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Relatie>()
+                .HasOne(e => e.Ontvanger)
+                .WithMany(e => e.OntvangenVrienden)
+                .HasForeignKey(e => e.GebruikerID_2)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

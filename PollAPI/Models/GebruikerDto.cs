@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace PollAPI.Models
 {
-    public class Stem
+    public class GebruikerDto
     {
-        public int StemID { get; set; }
-        public int AntwoordID { get; set; }
         public int GebruikerID { get; set; }
-        public Gebruiker Gebruiker { get; set; }
+        public string Email { get; set; }
+        public string Gebruikersnaam { get; set; }
     }
 }

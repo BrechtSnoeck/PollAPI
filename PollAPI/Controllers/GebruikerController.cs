@@ -27,10 +27,10 @@ namespace PollAPI.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]Gebruiker userParam)
         {
-            var gebruiker = _gebruikerService.Authenticate(userParam.Gebruikersnaam, userParam.Wachtwoord);
+            var gebruiker = _gebruikerService.Authenticate(userParam.Email, userParam.Wachtwoord);
 
             if (gebruiker == null)
-                return BadRequest(new { message = "Gebruikersnaam of wachtwoord is incorrect" });
+                return BadRequest(new { message = "Email of wachtwoord is incorrect" });
 
             return Ok(gebruiker);
         }
@@ -39,7 +39,12 @@ namespace PollAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Gebruiker>>> GetGebruikers()
         {
-            return await _context.Gebruikers.ToListAsync();
+            //return await _context.Gebruikers.ToListAsync();
+            var gebruikers = _context.Gebruikers
+                 .Include(g => g.OntvangenVrienden)
+                 .Include(g => g.VerzondenVrienden);
+
+            return await gebruikers.ToListAsync();
         }
 
         // GET: api/Gebruiker/5
@@ -99,7 +104,7 @@ namespace PollAPI.Controllers
                 return CreatedAtAction("GetGebruiker", new { id = gebruiker.GebruikerID }, gebruiker);
             }
 
-            return null;
+            return BadRequest(new { message = "Dit e-mailadres is al in gebruik!" });
         }
 
         // DELETE: api/Gebruiker/5

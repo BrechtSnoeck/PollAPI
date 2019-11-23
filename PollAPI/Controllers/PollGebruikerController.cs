@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,27 +22,41 @@ namespace PollAPI.Controllers
         }
 
         // GET: api/PollGebruiker
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PollGebruiker>>> GetPollGebruikers()
         {
-            return await _context.PollGebruikers.ToListAsync();
+            //return await _context.PollGebruikers.ToListAsync();
+
+            var pollGebruikers = _context.PollGebruikers
+                .Include(p => p.Poll);
+               
+
+            return await pollGebruikers.ToListAsync();
         }
 
         // GET: api/PollGebruiker/5
+        [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<PollGebruiker>> GetPollGebruiker(int id)
+        public async Task<ActionResult<IEnumerable<PollGebruiker>>> GetPollGebruiker(int id)
         {
-            var pollGebruiker = await _context.PollGebruikers.FindAsync(id);
+            var pollGebruikers =  _context.PollGebruikers
+                .Include(pg => pg.Poll)
+                .ThenInclude(p => p.Antwoorden)
+                .ThenInclude(a => a.Stemmen)
+                .Where(p => p.GebruikerID == id);
 
-            if (pollGebruiker == null)
+
+            if (pollGebruikers == null)
             {
                 return NotFound();
             }
 
-            return pollGebruiker;
+            return await pollGebruikers.ToListAsync();
         }
 
         // PUT: api/PollGebruiker/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPollGebruiker(int id, PollGebruiker pollGebruiker)
         {
@@ -72,6 +87,7 @@ namespace PollAPI.Controllers
         }
 
         // POST: api/PollGebruiker
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<PollGebruiker>> PostPollGebruiker(PollGebruiker pollGebruiker)
         {
@@ -82,6 +98,7 @@ namespace PollAPI.Controllers
         }
 
         // DELETE: api/PollGebruiker/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<PollGebruiker>> DeletePollGebruiker(int id)
         {
