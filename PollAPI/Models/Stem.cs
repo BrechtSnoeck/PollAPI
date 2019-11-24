@@ -11,5 +11,6 @@ namespace PollAPI.Models
         public int AntwoordID { get; set; }
         public int GebruikerID { get; set; }
         public Gebruiker Gebruiker { get; set; }
+        public Antwoord Antwoord { get; set; }
     }
 }

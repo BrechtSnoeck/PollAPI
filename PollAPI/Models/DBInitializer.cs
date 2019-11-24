@@ -27,8 +27,13 @@ namespace PollAPI.Models
                   Email = "ruben@thomasmore.be",
                   Wachtwoord = "123456",
                   Gebruikersnaam = "ruben"
-              }
-              ,
+              },
+              new Gebruiker
+              {
+                  Email = "karen@thomasmore.be",
+                  Wachtwoord = "123456",
+                  Gebruikersnaam = "karen"
+              },
               new Gebruiker
               {
                   Email = "boz@thomasmore.be",
@@ -66,21 +71,33 @@ namespace PollAPI.Models
                     PollID = 1,
                     GebruikerID = 1,
                     Gestemd = true,
-                    IsAdmin = true
+                    IsAdmin = true,
+                    IsActief =true
                 },
                 new PollGebruiker
                 {
                     PollID = 1,
                     GebruikerID = 2,
                     Gestemd = true,
-                    IsAdmin = false
+                    IsAdmin = false,
+                    IsActief = true
                 },
                 new PollGebruiker
                 {
                     PollID = 2,
                     GebruikerID = 1,
                     Gestemd = true,
-                    IsAdmin = true
+                    IsAdmin = true,
+                    IsActief = true
+                }
+                ,
+                new PollGebruiker
+                {
+                    PollID = 2,
+                    GebruikerID = 2,
+                    Gestemd = false,
+                    IsAdmin = false,
+                    IsActief = true
                 }
                 ,
                 new PollGebruiker
@@ -88,14 +105,32 @@ namespace PollAPI.Models
                     PollID = 3,
                     GebruikerID = 1,
                     Gestemd = false,
-                    IsAdmin = true
+                    IsAdmin = true,
+                    IsActief = true
+                },
+                new PollGebruiker
+                {
+                    PollID = 3,
+                    GebruikerID = 2,
+                    Gestemd = false,
+                    IsAdmin = false,
+                    IsActief = true
+                },
+                new PollGebruiker
+                {
+                    PollID = 4,
+                    GebruikerID = 1,
+                    Gestemd = false,
+                    IsAdmin = false,
+                    IsActief = true
                 },
                 new PollGebruiker
                 {
                     PollID = 4,
                     GebruikerID = 2,
                     Gestemd = false,
-                    IsAdmin = true
+                    IsAdmin = true,
+                    IsActief = true
                 }
                 );
             context.SaveChanges();
@@ -181,6 +216,12 @@ namespace PollAPI.Models
                 {
                     GebruikerID_1 = 1,
                     GebruikerID_2 = 3,
+                    status = true
+                },
+                new Relatie
+                {
+                    GebruikerID_1 = 1,
+                    GebruikerID_2 = 4,
                     status = true
                 }
                 );

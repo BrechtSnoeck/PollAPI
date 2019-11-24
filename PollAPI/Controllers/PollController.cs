@@ -117,7 +117,8 @@ namespace PollAPI.Controllers
                         PollID = poll.PollID,
                         GebruikerID = item,
                         Gestemd = false,
-                        IsAdmin = false
+                        IsAdmin = false,
+                        IsActief = true
                     });
             }
             await _context.SaveChangesAsync();
@@ -129,7 +130,8 @@ namespace PollAPI.Controllers
                         PollID = poll.PollID,
                         GebruikerID = pollDto.MakerID,
                         Gestemd = false,
-                        IsAdmin = true
+                        IsAdmin = true,
+                        IsActief = true
                     });
 
             await _context.SaveChangesAsync();

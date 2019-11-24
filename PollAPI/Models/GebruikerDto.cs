@@ -10,5 +10,6 @@ namespace PollAPI.Models
         public int GebruikerID { get; set; }
         public string Email { get; set; }
         public string Gebruikersnaam { get; set; }
+        public int AantalPolls { get; set; }
     }
 }

@@ -44,8 +44,8 @@ namespace PollAPI.Controllers
                 .Include(pg => pg.Poll)
                 .ThenInclude(p => p.Antwoorden)
                 .ThenInclude(a => a.Stemmen)
-                .Where(p => p.GebruikerID == id);
-
+                .ThenInclude(g => g.Gebruiker)
+                .Where(p => p.GebruikerID == id && p.IsActief == true);
 
             if (pollGebruikers == null)
             {

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PollAPI.Models;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace PollAPI.Controllers
 {
@@ -117,6 +119,18 @@ namespace PollAPI.Controllers
             if (bestaatGebruiker == null)
             {
                 return BadRequest(new { message = "Er is geen gebruiker met dit e-mailadres!(Of je voegde jezelf toe als vriend :) )" });
+
+                //var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+                //var client = new SendGridClient(apiKey);
+                //var from = new EmailAddress("r0621517@student.thomasmore.be", "Brecht Snoeck");
+                //var subject = "Sending with SendGrid is Fun";
+                //var to = new EmailAddress("brekke.snoeck@hotmail.com", "Brecht");
+                //var plainTextContent = "and easy to do anywhere, even with C#";
+                //var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
+                //var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                //var response = await client.SendEmailAsync(msg);
+
+                //return relatie;
             } 
             else
             {

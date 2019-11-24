@@ -37,12 +37,19 @@ namespace PollAPI.Controllers
 
         // GET: api/Gebruiker
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Gebruiker>>> GetGebruikers()
+        public async Task<ActionResult<IEnumerable<GebruikerDto>>> GetGebruikers()
         {
             //return await _context.Gebruikers.ToListAsync();
+            var polls = _context.Polls.Count();
             var gebruikers = _context.Gebruikers
-                 .Include(g => g.OntvangenVrienden)
-                 .Include(g => g.VerzondenVrienden);
+                 .Select(g =>
+                    new GebruikerDto
+                    {
+                        Gebruikersnaam = g.Gebruikersnaam,
+                        GebruikerID = g.GebruikerID,
+                        Email = g.Email,
+                        AantalPolls = polls
+                    });
 
             return await gebruikers.ToListAsync();
         }
